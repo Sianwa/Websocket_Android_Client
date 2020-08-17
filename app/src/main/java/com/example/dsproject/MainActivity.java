@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         myAdapter  = new RecyclerViewAdapter(toysArrayList, new RecyclerViewAdapter.CartButtonListener() {
             @Override
             public void cartbtnClick(View v, int position) {
-                sendMessage();
+                //sendMessage();
             }
         });
         myRecyclerView.setAdapter(myAdapter);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
         try {
-            webSocketClient= factory.createSocket("ws://localhost:8080/test")
+            webSocketClient= factory.createSocket("ws://192.168.0.34:8080/DSProject/app/cart")
                     .addListener(new WebSocketListener() {
                         @Override
                         public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-
+                            sendMessage();
                         }
 
                         @Override
