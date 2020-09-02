@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolders> {
     private ArrayList<ToyItem> toyItemArrayList;
-   CartButtonListener cartButtonListener;
+    CartButtonListener cartButtonListener;
 
     public RecyclerViewAdapter(ArrayList<ToyItem> toyItemArrayList, CartButtonListener cartButtonListener) {
         this.toyItemArrayList = toyItemArrayList;
@@ -61,6 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     cartButtonListener.cartbtnClick(v,getAdapterPosition());
+
                 }
             });
         }

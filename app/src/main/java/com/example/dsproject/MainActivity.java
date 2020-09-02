@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.ThreadType;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -28,12 +29,12 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Adapter myAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     ArrayList<ToyItem> toysArrayList;
     TextView myCost;
     Button myButton;
     WebSocket webSocketClient;
+    ToyItem clickedToy;
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +49,15 @@ public class MainActivity extends AppCompatActivity {
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         toysArrayList = new ArrayList<>();
-        myAdapter  = new RecyclerViewAdapter(toysArrayList, new RecyclerViewAdapter.CartButtonListener() {
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(toysArrayList, new RecyclerViewAdapter.CartButtonListener() {
             @Override
             public void cartbtnClick(View v, int position) {
-                //sendMessage();
+                clickedToy = toysArrayList.get(position);
+                sendMessage();
             }
         });
         myRecyclerView.setAdapter(myAdapter);
-        
+
         prepareToysData();
         createWebSocketClient();
     }
@@ -63,31 +65,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareToysData() {
         ToyItem toyItem = new ToyItem(1,"Water Gun",
-                "Lorem ipsum dolor sit amet, consectetur.",
-                27/07,1234);
+                "Lorem ipsum dolor sit amet, consectetur.",205,
+                "27/07/2020",1234);
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(2,"Football",
-                "Lorem ipsum dolor sit amet, consectetur.",
-                27/07,1235);
+                "Lorem ipsum dolor sit amet, consectetur.",201,
+                "27/07/2020",1235);
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(3,"Skateboard",
-                "Lorem ipsum dolor sit amet, consectetur.",
-                27/07,1236);
+                "Lorem ipsum dolor sit amet, consectetur.",206,
+                "27/07/2020",1236);
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(4,"Lego",
-                "Lorem ipsum dolor sit amet, consectetur.",
-                27/07,1237);
+                "Lorem ipsum dolor sit amet, consectetur.",202,
+                "27/07/2020",1237);
         toysArrayList.add(toyItem);
 
     }
     private void createWebSocketClient() {
 
-            WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
+        WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
         try {
-            webSocketClient= factory.createSocket("ws://192.168.0.34:8080/DSProject/app/cart")
+            webSocketClient= factory.createSocket("ws://192.168.0.79:8080/test")
                     .addListener(new WebSocketListener() {
                         @Override
                         public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
@@ -95,13 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                            sendMessage();
+
                         }
 
                         @Override
                         public void onConnectError(WebSocket websocket, WebSocketException cause) throws Exception {
                             Log.i("WebSocket", "Failed to connect....");
-
                         }
 
                         @Override
@@ -262,20 +263,11 @@ public class MainActivity extends AppCompatActivity {
         if (webSocketClient.isOpen()) {
             Log.i("WebSocket","Button was clicked");
             //todo instead of sending the message, send the ToyID..
-            webSocketClient.sendText("Add to cart");
-
+            String jsonData = gson.toJson((clickedToy.getToyPrice()));
+            webSocketClient.sendText(jsonData);
             Toast.makeText(getApplicationContext(),"Added to cart",Toast.LENGTH_LONG).show();
         }
     }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        if (webSocketClient != null){
-            webSocketClient.disconnect();
-            webSocketClient = null;
-        }
-    }
-
 
 
 }
