@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
         try {
-            webSocketClient= factory.createSocket("ws://192.168.0.79:8080/test")
+            webSocketClient= factory.createSocket("ws://192.168.0.170:8080/test")
                     .addListener(new WebSocketListener() {
                         @Override
                         public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                                     //get response from server and display it on the app interface.
                                     try {
                                         myCost.setText(message);
+
                                     }catch (Exception e){
                                         e.printStackTrace();
                                     }
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage() {
         if (webSocketClient.isOpen()) {
             Log.i("WebSocket","Button was clicked");
-            //todo instead of sending the message, send the ToyID..
+            //todo instead of sending the toy price alone, send all toy info..
             String jsonData = gson.toJson((clickedToy.getToyPrice()));
             webSocketClient.sendText(jsonData);
             Toast.makeText(getApplicationContext(),"Added to cart",Toast.LENGTH_LONG).show();
