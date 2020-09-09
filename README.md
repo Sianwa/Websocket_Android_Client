@@ -6,6 +6,8 @@ The app was ment to emulate an online shopping cart where the recyclerview rows 
 The android client uses the websocket client library from: https://github.com/TakahikoKawasaki/nv-websocket-client.
 
 ## Team
-Kelsey Makale 
+Kelsey Makale
+
 Jeff Gichuki
+
 Jesse Kiriungi
