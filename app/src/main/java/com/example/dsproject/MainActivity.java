@@ -74,22 +74,26 @@ public class MainActivity extends AppCompatActivity {
     private void prepareToysData() {
         ToyItem toyItem = new ToyItem(1,"Water Gun",
                 "Lorem ipsum dolor sit amet, consectetur.",205,
-                "27/07/2020",1234);
+                "27/07/2020",1234, "WaterNation",
+                 "Nairobi, Westlands",223344, "Kenya");
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(2,"Football",
                 "Lorem ipsum dolor sit amet, consectetur.",201,
-                "27/07/2020",1235);
+                "27/07/2020",1235,"Nike",
+                "USA, New York",2264, "USA");
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(3,"Skateboard",
                 "Lorem ipsum dolor sit amet, consectetur.",206,
-                "27/07/2020",1236);
+                "27/07/2020",1236,"ToysRus",
+                "USA, Washington",7685, "USA");
         toysArrayList.add(toyItem);
 
         toyItem = new ToyItem(4,"Lego",
                 "Lorem ipsum dolor sit amet, consectetur.",202,
-                "27/07/2020",1237);
+                "27/07/2020",1237,"Lego Kenya",
+                "Nairobi, Westlands",445544, "Kenya");
         toysArrayList.add(toyItem);
 
     }
@@ -279,8 +283,8 @@ public class MainActivity extends AppCompatActivity {
     private void checkout() {
         if(webSocketClient.isOpen()){
             String randomstr = UUID.randomUUID().toString();
-            webSocketClient.sendText("Thank you"+randomstr);
-            Log.i("Websocket", "Sent random string to server as acknowledgement" + randomstr);
+            webSocketClient.sendText("Thank you "+randomstr);
+            Log.i("Websocket", "Sent random string to server as acknowledgement : " + randomstr);
 
             //close socket connection
             webSocketClient.disconnect();
