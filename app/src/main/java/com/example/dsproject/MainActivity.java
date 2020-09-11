@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
         CardView cardView = findViewById(R.id.cardView);
         myCost = findViewById(R.id.cost);
+        myButton = findViewById(R.id.checkoutbtn);
+        myButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkout();
+            }
+        });
+
 
         RecyclerView myRecyclerView = findViewById(R.id.MyRecyclerView);
         myRecyclerView.setHasFixedSize(true);
@@ -89,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
         try {
-            webSocketClient= factory.createSocket("ws://192.168.0.170:8080/test")
+            webSocketClient= factory.createSocket("ws://localhost:8080/cart")
                     .addListener(new WebSocketListener() {
                         @Override
                         public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
@@ -262,13 +270,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendMessage() {
         if (webSocketClient.isOpen()) {
-            Log.i("WebSocket","Button was clicked");
             //todo instead of sending the toy price alone, send all toy info..
-            String jsonData = gson.toJson((clickedToy.getToyPrice()));
+            String jsonData = gson.toJson(clickedToy);
             webSocketClient.sendText(jsonData);
             Toast.makeText(getApplicationContext(),"Added to cart",Toast.LENGTH_LONG).show();
         }
     }
+    private void checkout() {
+        if(webSocketClient.isOpen()){
+            String randomstr = UUID.randomUUID().toString();
+            webSocketClient.sendText("Thank you"+randomstr);
+            Log.i("Websocket", "Sent random string to server as acknowledgement" + randomstr);
 
+            //close socket connection
+            webSocketClient.disconnect();
+            Log.i("Websocket", "Disconected from websocket server");
+            Toast.makeText(getApplicationContext(),"Disconnected from server",Toast.LENGTH_LONG).show();
+        }
+    }
 
 }
